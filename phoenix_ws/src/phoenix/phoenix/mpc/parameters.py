@@ -60,16 +60,16 @@ params_['takeoff_height']        = -1.0                           # height at wh
 params_['z0']                    = -0.16                        
 params_['zf']                    = -0.30
 
-# Roboclaw and Dynamixel addresses
+# Roboclaw and CAN addresses
 # params_['tilt_roboclaw_address']         = "/dev/ttyACM1"
 params_['tilt_roboclaw_address']        = "/dev/ttyACM1"  #for leptop testing
-# params_['drive_roboclaw_address']        = "/dev/ttyACM0"
-params_['drive_dynamixel_address']      = "/dev/ttyUSB0"  #dynamixel
-params_['left_dxl_id']                  = 1  #dynamixel
-params_['right_dxl_id']                 = 2  #dynamixel
 
-params_['torque_on_address'] = 64
-params_['goal_velocity_address'] = 104 
+# CubeMars CAN drive motors
+params_['can_channel']                  = "can0"
+params_['left_can_id']                  = 1
+params_['right_can_id']                 = 2
+params_['erpm_max']                     = 100000   # hardware physical limit
+params_['allow_max_rate']               = 0.5      # fraction of erpm_max actually allowed (tune up from here)
 
 
 # kinematic driving parameters
