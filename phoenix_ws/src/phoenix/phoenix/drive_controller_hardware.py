@@ -101,16 +101,16 @@ class DriveControllerHardware(DriveControllerBase):
     def update(self):
         if self.drive_switch_trigger == dead and self.kill_switch_trigger == min:
             if self.manual:
-                lin_vel = self.map_speed(self.normalize(self.drive_speed_in))
-                ang_vel = self.map_speed(self.normalize(self.turn_speed_in))
+                lin_vel = -1.0 * self.map_speed(self.normalize(self.drive_speed_in))
+                ang_vel = -0.5 * self.map_speed(self.normalize(self.turn_speed_in))
 
                 self.get_logger().info(
-                    f"lin_vel, ang_vel: ({self.normalize(self.drive_speed_in):.3f}, {ang_vel})"
+                    f"lin_vel, ang_vel: ({lin_vel}, {ang_vel})"
                 )
 
                 self.motor_manager.set_all_velocity({
-                    right_can_id:  -lin_vel + ang_vel,
-                    left_can_id:  (lin_vel - ang_vel),  # left reversed
+                    right_can_id:  lin_vel + ang_vel,
+                    left_can_id:  -(lin_vel - ang_vel),  # left reversed
                 })
             else:
                 # automatic control: drive_speed / turn_speed come from DriveControllerBase
