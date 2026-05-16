@@ -68,8 +68,8 @@ params_['tilt_roboclaw_address']        = "/dev/ttyACM1"  #for leptop testing
 params_['can_channel']                  = "can0"
 params_['left_can_id']                  = 1
 params_['right_can_id']                 = 2
-params_['erpm_max']                     = 100000   # hardware physical limit
-params_['allow_max_rate']               = 0.5      # fraction of erpm_max actually allowed (tune up from here)
+params_['erpm_max']                     = 50000   # hardware physical limit
+params_['allow_max_rate']               =   1.0      # fraction of erpm_max actually allowed (tune up from here)
 
 
 # kinematic driving parameters

@@ -79,11 +79,11 @@ class DriveControllerHardware(DriveControllerBase):
         return int(self.actual_max_erpm * speed_normalized)
 
     def move_right_wheel(self, erpm):
-        self.motor_manager.set_velocity(right_can_id, erpm)
+        self.motor_manager.set_velocity(right_can_id, -erpm)
 
     def move_left_wheel(self, erpm):
         # Left motor is physically reversed
-        self.motor_manager.set_velocity(left_can_id, -erpm)
+        self.motor_manager.set_velocity(left_can_id, erpm)
 
     def on_shutdown(self):
         self.motor_manager.stop_all()
@@ -102,8 +102,8 @@ class DriveControllerHardware(DriveControllerBase):
                 )
 
                 self.motor_manager.set_all_velocity({
-                    right_can_id:  lin_vel + ang_vel,
-                    left_can_id:  -(lin_vel - ang_vel),  # left reversed
+                    right_can_id:  -lin_vel + ang_vel,
+                    left_can_id:  (lin_vel - ang_vel),  # left reversed
                 })
             else:
                 # automatic control: drive_speed / turn_speed come from DriveControllerBase
@@ -111,8 +111,8 @@ class DriveControllerHardware(DriveControllerBase):
                 ang_vel = -self.map_speed(self.turn_speed)
 
                 self.motor_manager.set_all_velocity({
-                    right_can_id:  lin_vel + ang_vel,
-                    left_can_id:  -(lin_vel - ang_vel),  # left reversed
+                    right_can_id:  -lin_vel + ang_vel,
+                    left_can_id:  (lin_vel - ang_vel),  # left reversed
                 })
         else:
             self.motor_manager.set_all_velocity({

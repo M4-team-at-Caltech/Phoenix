@@ -28,6 +28,8 @@ tmux send-keys -t robot:0.0 './reset_roboclaw.sh' C-m
 tmux send-keys -t robot:0.0 'jetson' C-m
 
 sleep 10
+tmux send-keys -t robot:0.0 './init_jetson_can0.sh' C-m
+sleep 3
 
 # launch tilt controller
 tmux send-keys -t robot:0.0 './launch_tilt.sh' C-m
