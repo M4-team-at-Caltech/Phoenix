@@ -80,7 +80,9 @@ class DriveControllerHardware(DriveControllerBase):
     def normalize(self, rc_value):
         return (float(rc_value) - float(dead)) / float(max - dead)
 
-    def map_speed(self, speed_normalized):
+    def map_speed(self, speed_normalized, vel_deadzone=0.01):
+        if abs(speed_normalized) < vel_deadzone:
+            return 0
         return int(self.actual_max_erpm * speed_normalized)
 
     def move_right_wheel(self, erpm):
