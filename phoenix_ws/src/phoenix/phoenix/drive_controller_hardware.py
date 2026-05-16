@@ -61,9 +61,14 @@ class DriveControllerHardware(DriveControllerBase):
             motor_ids=(left_can_id, right_can_id)
         )
 
+    def _apply_deadzone(self, value, deadzone=10):
+        if abs(value - dead) <= deadzone:
+            return dead
+        return value
+
     def rc_listener_callback(self, msg):
-        self.drive_speed_in       = msg.values[pitch_channel]
-        self.turn_speed_in        = msg.values[roll_channel]
+        self.drive_speed_in       = self._apply_deadzone(msg.values[pitch_channel])
+        self.turn_speed_in        = self._apply_deadzone(msg.values[roll_channel])
         self.drive_switch_trigger = msg.values[drive_switch_channel]
         self.kill_switch_trigger  = msg.values[kill_switch_channel]
 
