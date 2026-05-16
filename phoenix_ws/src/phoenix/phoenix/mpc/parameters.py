@@ -15,7 +15,8 @@ params_['max_tilt_on_land']      = np.deg2rad(85)
 
 # RC channels
 params_['tilt_channel1']          = 10 # add two tilt channal for left and right arm
-params_['tilt_channel2']          = 9
+params_['tilt_channel2']          = 10
+# params_['tilt_channel2']          = 9
 
 params_['tilt_switch_channel']   = 8 # min disable tilt, max enable tilt
 params_['drive_switch_channel']  = 4 # 1514, middle(dead) -> drive mod

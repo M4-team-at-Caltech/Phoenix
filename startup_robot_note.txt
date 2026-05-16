@@ -1,35 +1,39 @@
 #find this service
 sudo gedit /etc/systemd/system/startup_robot.service
 
+# change the path to .sh, User = $your_name
 
 #within the service:
 
 	[Unit]
-	Description=Start ATMO using m4 jetson
+	Description=Start Phoenix using jetson ARK
 	After=multi-user.target
 
 	[Service]
 	Type=oneshot
 	RemainAfterExit=yes
-	ExecStart=/bin/bash /home/m4/ATMO/ATMO/atmo_ws/startup_robot.sh
-	WorkingDirectory=/home/m4/ATMO/ATMO/atmo_ws
-	User=m4
+	ExecStart=/bin/bash /home/jetson/Phoenix/phoenix_ws/startup_robot.sh
+	WorkingDirectory=/home/jetson/Phoenix/phoenix_ws
+	User=jetson
 	Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-	StandardOutput=append:/home/m4/ATMO/ATMO/startup_robot.log
-	StandardError=append:/home/m4/ATMO/ATMO/startup_robot.log
+	StandardOutput=append:/home/jetson/Phoenix/phoenix_ws/startup_robot.log
+	StandardError=append:/home/jetson/Phoenix/phoenix_ws/startup_robot.log
 	TimeoutStartSec=120
 
 	[Install]
 	WantedBy=multi-user.target
 
 
+
 #start service
 sudo systemctl daemon-reload
-sudo systemctl restart start_robot.service
+sudo systemctl enable startup_robot.service
+sudo systemctl daemon-reload
+sudo systemctl restart startup_robot.service
 
 #reload service
-sudo systemctl restart start_robot.service
+sudo systemctl restart startup_robot.service
 
 #disable service
-sudo systemctl disable start_robot.service
+sudo systemctl disable startup_robot.service
 

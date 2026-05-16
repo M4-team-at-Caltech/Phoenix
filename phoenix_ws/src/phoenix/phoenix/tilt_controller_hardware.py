@@ -13,6 +13,9 @@ from phoenix.mpc.TiltControllerBase import TiltControllerBase
 from phoenix.mpc.roboclaw_3 import Roboclaw
 from phoenix.mpc.parameters import params_
 
+import time
+from collections import deque
+
 min                    = params_['min']
 max                    = params_['max']
 dead                   = params_['dead']
@@ -26,6 +29,8 @@ offboard_channel       = params_.get('offboard_channel')
 tilt_switch_channel    = params_.get('tilt_switch_channel')   # = 8 # min disable tilt, max enable tilt
 # drive_switch_channel   = params_.get('drive_switch_channel')  # = 4 # 1514, middle(dead) -> drive mod
 kill_switch_channel    = params_.get('kill_switch_channel')   # = 5 # kill Flymod also kill drive and tilt
+
+
 
 class TiltHardware(TiltControllerBase):
     def __init__(self):
@@ -77,6 +82,14 @@ class TiltHardware(TiltControllerBase):
 
         # limit tilt
         self.limit_tilt = deg2rad(1.0)
+
+        self.speed_fillter_count = 0
+        self.speed_fillter_size = 100
+
+        self.speed_fillter_1 = deque(maxlen=self.speed_fillter_size)
+        self.speed_fillter_2 =  deque(maxlen=self.speed_fillter_size)
+
+        self.speed_timer =  deque(maxlen=self.speed_fillter_size)
 
     def rc_listener_callback(self, msg):
         # https://futabausa.com/wp-content/uploads/2018/09/18SZ.pdf
@@ -149,8 +162,23 @@ class TiltHardware(TiltControllerBase):
         self.tilt_angle1 =  float(interp(enc_count1[1],self.encoder_data,self.angle_data))
         self.tilt_angle2 =  float(interp(enc_count2[1],self.encoder_data,self.angle_data))
 
-        print(f"tilt angle is: {rad2deg(self.tilt_angle1),rad2deg(self.tilt_angle2) }")
+        # print(f"tilt angle is: {rad2deg(self.tilt_angle1),rad2deg(self.tilt_angle2) }")
         print(f"encoder count is: {enc_count1, enc_count2}")
+
+        # self.speed_fillter_count +=1
+        # self.speed_fillter_1.append(enc_count1)
+        # self.speed_fillter_2.append(enc_count2)
+        # self.speed_timer.append(time.time())
+
+        # if(self.speed_fillter_count > self.speed_fillter_size ):
+            
+        #     speed_1 = float(self.speed_fillter_1[-1][1] - self.speed_fillter_1[0][1]) / float(self.speed_timer[-1] - self.speed_timer[0])
+        #     speed_2 = float(self.speed_fillter_2[-1][1] - self.speed_fillter_2[0][1]) / float(self.speed_timer[-1] - self.speed_timer[0])
+        #     print(f"speed count is: {speed_1, speed_2}")
+        #     print(f"speed count is: {speed_1 - speed_2}")
+
+        
+
         return self.tilt_angle1, self.tilt_angle1
 
     def update(self):
@@ -175,7 +203,7 @@ class TiltHardware(TiltControllerBase):
 
                 # u = 0.5
                 self.spin_motor(u1,1)
-                self.spin_motor(u2,2)
+                self.spin_motor(u2*0.95,2)
 
             else:
 

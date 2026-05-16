@@ -168,6 +168,8 @@ class DriveControllerHardware(DriveControllerBase):
                 self.move_right_wheel(lin_vel + ang_vel)
                 self.move_left_wheel(lin_vel - ang_vel)
         else:
+            self.move_right_wheel(0)
+            self.move_left_wheel(0)
             print("pause driving")
 
      
